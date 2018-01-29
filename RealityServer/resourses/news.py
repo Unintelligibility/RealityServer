@@ -15,6 +15,8 @@ class News(Resource):
         res = {i: x for i, x in enumerate(self.news.find())}
         # pprint(res)
         res = json.loads(dumps(res))
+        for x, y in res.items():
+            y['_id'] = y['_id']['$oid']
         return res
 
     def post(self):
