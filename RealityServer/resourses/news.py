@@ -1,15 +1,13 @@
 from flask_restful import Resource
-from pymongo import MongoClient
 from bson.json_util import loads, dumps
 from pprint import pprint
 import json
+from RealityServer import mongo
 
 
 class News(Resource):
     def __init__(self):
-        client = MongoClient('mongodb://118.89.178.181/')
-        db = client.reality
-        self.news = db.news
+        self.news = mongo.db.news
 
     def get(self):
         res = {i: x for i, x in enumerate(self.news.find())}
