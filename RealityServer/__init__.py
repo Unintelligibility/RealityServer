@@ -4,15 +4,12 @@ define app and routes
 from flask import Flask, Blueprint
 from flask_restful import Resource, Api, url_for
 from flask_pymongo import PyMongo
-from flask_login import LoginManager
 app = Flask(__name__, instance_relative_config=True)
 
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
 mongo = PyMongo(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 from RealityServer.resourses.news import News
 from RealityServer.resourses.media import Media
