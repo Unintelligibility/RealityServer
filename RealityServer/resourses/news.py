@@ -19,3 +19,8 @@ class News(Resource):
 
     def post(self):
         pass
+
+
+class Recommend(Resource):
+    def __init__(self):
+        pass
