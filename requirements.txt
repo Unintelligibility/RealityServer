@@ -4,3 +4,4 @@ flask-restful
 flask-pymongo
 flask-httpauth
 passlib
+itsdangerous
