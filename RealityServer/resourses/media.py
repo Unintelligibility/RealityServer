@@ -9,12 +9,14 @@ class Media(Resource):
     def __init__(self):
         self.media = mongo.db.star_media
 
-    def get(self, uid):
+    def get(self):
+        # user_id
         res = {i: x for i, x in enumerate(self.media.find())}
         # pprint(res)
         res = json.loads(dumps(res))
         util.oid_transform(res)
         return res
 
-    def post(self, ids):
+    def post(self):
+        # user_id
         mongo.db.star_media.insert()
