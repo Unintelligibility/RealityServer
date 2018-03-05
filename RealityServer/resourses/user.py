@@ -31,7 +31,7 @@ class Register(Resource):
              'password': pwd_context.encrypt(password),
              'icon': icon}
         ).inserted_id
-        return {'resultCode': 1, 'data': {'userid': str(userid)}}, 201
+        return {'resultCode': 1, 'data': {'userid': str(userid), 'username': username, 'password': password}}, 201
 
 
 class SignIn(Resource):
@@ -47,9 +47,7 @@ class SignIn(Resource):
 
 def generate_auth_token(expiration=600):
     s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
-    print(type(g.uid))
-    print(g.uid)
-    return s.dumps({'_id': g.uid})
+    return s.dumps({'_id': str(g.uid)})
 
 
 def verify_auth_token(token):
