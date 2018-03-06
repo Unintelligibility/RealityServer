@@ -16,7 +16,7 @@ class News(Resource):
         # pprint(res)
         res = json.loads(dumps(res))
         util.oid_transform(res)
-        return res
+        return util.data_success(res)
 
     def post(self):
         pass
