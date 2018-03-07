@@ -6,18 +6,17 @@ from RealityServer.common import util
 import json
 from RealityServer import mongo
 
-
 class News(Resource):
     def __init__(self):
         self.news = mongo.db.news
 
     def get(self):
-        res = {i: x for i, x in enumerate(self.news.find().limit(20))}  # TODO: add recommend method and newest news
-        # pprint(res)
+        res = {i: util.bytesToStr(x) for i, x in enumerate(self.news.find().limit(20))}  # TODO: add recommend method and newest news
+        pprint(res)
         res = json.loads(dumps(res))
         util.oid_transform(res)
         return util.data_success(res)
-
+    
     def post(self):
         pass
 
