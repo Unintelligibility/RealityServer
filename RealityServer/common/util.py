@@ -10,8 +10,11 @@ def data_success(data):
 def data_fail(message):
     return {'resultCode': 0, 'resultMessage': message}
 
+import bson
 def bytesToStr(obj):
     for key in obj:
-        if(type(obj[key]) is bytes):
+        if(type(obj[key]) is bytes):# or type(obj[key]) is bson.binary.Binary):
             obj[key]=(obj[key].decode())
+        if(type(obj[key]) is bson.binary.Binary):
+        	obj[key]=bson.BSON(obj[key])
     return obj
