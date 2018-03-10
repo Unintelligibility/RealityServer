@@ -11,9 +11,9 @@ class News(Resource):
     def __init__(self):
         self.news = mongo.db.news
 
-    def get(self):
+    def get(self, user_id):
         res = {i: util.bytes_to_str(x) for i, x in
-               enumerate(self.news.find().limit(20))}  # TODO: add recommend method and newest news
+               enumerate(self.news.find().sort([("time", -1)]).limit(20))}  # TODO: add recommend method and newest news
         res = json.loads(dumps(res))
         util.oid_transform(res)
         return util.data_success(res)
