@@ -5,3 +5,4 @@ flask-pymongo
 flask-httpauth
 passlib
 itsdangerous
+jieba

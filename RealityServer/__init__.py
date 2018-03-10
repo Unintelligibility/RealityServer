@@ -25,6 +25,7 @@ api.add_resource(Recommend, '/<string:new_id>/recommend')
 api.add_resource(Media, '/staroffice')
 api.add_resource(Register, '/signup')
 api.add_resource(SignIn, '/signin')
+api.add_resource(SignIn, '/signin')
 
 if __name__ == '__main__':
     app.run()
