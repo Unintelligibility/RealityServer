@@ -1,10 +1,7 @@
 from flask_restful import Resource
-from bson.json_util import loads, dumps
-from pprint import pprint
-from RealityServer.common import util
-import json
 from RealityServer import mongo, app, auth
 from passlib.apps import custom_app_context as pwd_context
+from bson import ObjectId
 from flask import request, abort, g
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
@@ -45,6 +42,13 @@ class SignIn(Resource):
             return {'resultCode': 0}, 400
 
 
+class Profile(Resource):
+    @auth.login_required
+    def post(self, user_id):
+        likes = request.get_json(force=True)['likes']
+        mongo.db.profiles.insert_one({'likes': likes})
+
+
 def generate_auth_token(expiration=600):
     s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
     return s.dumps({'_id': str(g.uid)})
@@ -55,25 +59,30 @@ def verify_auth_token(token):
     try:
         data = s.loads(token)
     except SignatureExpired:
+        print('expired')
         return None  # valid token, but expired
     except BadSignature:
+        print('bad')
         return None  # invalid token
     users = mongo.db.users
-    user = users.find_one({'_id': data['_id']})
+    user = users.find_one({'_id': ObjectId(data['_id'])})
     return user
 
 
-@app.route('/token')
-@auth.login_required
-def get_auth_token():
-    token = generate_auth_token()
-    return {'token': token.decode('ascii'), 'duration': 3600}
+class Token(Resource):
+
+    @auth.login_required
+    def get(self):
+        token = generate_auth_token()
+        return {'token': token.decode('ascii'), 'duration': 3600, 'uid': str(g.uid)}, 200
 
 
 @auth.verify_password
 def verify_password(username_or_token, password):
     # first try to authenticate by token
+    print('token', username_or_token)
     user = verify_auth_token(username_or_token)
+    print(user)
     if not user:
         # try to authenticate with username/password
         user = mongo.db.users.find_one({'username': username_or_token})
