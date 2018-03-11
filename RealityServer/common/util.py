@@ -11,6 +11,10 @@ def data_fail(message):
     return {'resultCode': 0, 'resultMessage': message}
 
 
+def message_success(message=None):
+    return {'resultCode': 1, 'message': message}
+
+
 import bson
 
 

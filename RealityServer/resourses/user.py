@@ -5,6 +5,7 @@ from bson import ObjectId
 from flask import request, abort, g
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+from RealityServer.common import util
 
 
 class Register(Resource):
@@ -46,7 +47,8 @@ class Profile(Resource):
     @auth.login_required
     def post(self, user_id):
         likes = request.get_json(force=True)['likes']
-        mongo.db.profiles.insert_one({'likes': likes})
+        mongo.db.profiles.insert_one({'user_id': user_id, 'likes': likes})
+        return util.message_success(), 200
 
 
 def generate_auth_token(expiration=600):
@@ -62,7 +64,7 @@ def verify_auth_token(token):
         print('expired')
         return None  # valid token, but expired
     except BadSignature:
-        print('bad')
+        print('bad signature')
         return None  # invalid token
     users = mongo.db.users
     user = users.find_one({'_id': ObjectId(data['_id'])})
@@ -80,9 +82,7 @@ class Token(Resource):
 @auth.verify_password
 def verify_password(username_or_token, password):
     # first try to authenticate by token
-    print('token', username_or_token)
     user = verify_auth_token(username_or_token)
-    print(user)
     if not user:
         # try to authenticate with username/password
         user = mongo.db.users.find_one({'username': username_or_token})
