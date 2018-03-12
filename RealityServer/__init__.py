@@ -16,7 +16,7 @@ auth = HTTPBasicAuth()
 
 from RealityServer.resourses.news import News, Recommend, Report
 from RealityServer.resourses.media import Media
-from RealityServer.resourses.user import Register, SignIn, Profile, Token
+from RealityServer.resourses.user import Register, SignIn, Interest, Token, Profile
 
 api = Api(app)
 api.add_resource(News, '/<string:user_id>/read')
@@ -26,7 +26,8 @@ api.add_resource(Media, '/staroffice')
 api.add_resource(Register, '/signup')
 api.add_resource(SignIn, '/signin')
 api.add_resource(Token, '/token')
-api.add_resource(Profile, '/<string:user_id>/interest')
+api.add_resource(Interest, '/interest')
+api.add_resource(Profile, '/read_info')
 
 if __name__ == '__main__':
     app.run()

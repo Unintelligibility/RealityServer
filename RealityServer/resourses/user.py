@@ -38,22 +38,35 @@ class SignIn(Resource):
         password = request.get_json(force=True)['password']
         if verify_password(username, password):
             token = generate_auth_token()
-            return {'resultCode': 1, 'data': {'_id': str(g.uid), 'token': token.decode('ascii')}}
+            return {'resultCode': 1, 'data': {'_id': g.uid, 'token': token.decode('ascii')}}
         else:
             return {'resultCode': 0}, 400
 
 
-class Profile(Resource):
+class Token(Resource):
+
     @auth.login_required
-    def post(self, user_id):
-        likes = request.get_json(force=True)['likes']
-        mongo.db.profiles.insert_one({'user_id': user_id, 'likes': likes})
-        return util.message_success(), 200
+    def get(self):
+        token = generate_auth_token()
+        return {'token': token.decode('ascii'), 'duration': 3600, 'uid': g.uid}, 200
+
+
+@auth.verify_password
+def verify_password(username_or_token, password):
+    # first try to authenticate by token
+    user = verify_auth_token(username_or_token)
+    if not user:
+        # try to authenticate with username/password
+        user = mongo.db.users.find_one({'username': username_or_token})
+        if not user or not pwd_context.verify(password, user['password']):
+            return False
+    g.uid = str(user['_id'])
+    return True
 
 
 def generate_auth_token(expiration=600):
     s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
-    return s.dumps({'_id': str(g.uid)})
+    return s.dumps({'_id': g.uid})
 
 
 def verify_auth_token(token):
@@ -71,22 +84,54 @@ def verify_auth_token(token):
     return user
 
 
-class Token(Resource):
+'''
+推荐算法用户画像计算规则:
+    用户选择兴趣,该标签+10
+    用户阅读新闻，阅读超过6s +1 ,超过20s +2 ,收藏 +3 ,不感兴趣 -3       
+'''
+
+
+class Interest(Resource):
+    # 用户选择兴趣权重为10
+    interest_weight = 10
 
     @auth.login_required
-    def get(self):
-        token = generate_auth_token()
-        return {'token': token.decode('ascii'), 'duration': 3600, 'uid': str(g.uid)}, 200
+    def post(self):
+        likes = request.get_json(force=True)['likes']
+        mongo.db.profiles.insert_one({'user_id': g.uid, 'likes': {x: self.interest_weight for x in likes}})
+        return util.post_success(), 200
 
 
-@auth.verify_password
-def verify_password(username_or_token, password):
-    # first try to authenticate by token
-    user = verify_auth_token(username_or_token)
-    if not user:
-        # try to authenticate with username/password
-        user = mongo.db.users.find_one({'username': username_or_token})
-        if not user or not pwd_context.verify(password, user['password']):
-            return False
-    g.uid = user['_id']
-    return True
+class Profile(Resource):
+    # 阅读超过6s +1 ,超过15s +2
+    time_medium = 6
+    weight_medium = 1
+    time_long = 15
+    weight_long = 2
+
+    @auth.login_required
+    def post(self):
+        title = request.get_json()['title']
+        source = request.get_json()['source']
+        news_type = request.get_json()['news_type']
+        news_tags = request.get_json()['news_tags'].split(';')
+        if not news_type == '首页':
+            news_tags.append(news_type)
+        news_tags.append(source)
+        reading_time = request.get_json()['reading_time']
+
+        # if reading time is too short, ignore ( Another choice: analyse the title and the tags to update profile
+        if reading_time < self.time_medium:
+            return
+
+        weight = 0
+        if self.time_medium < reading_time < self.time_long:
+            weight = self.weight_medium
+        elif reading_time > self.time_long:
+            weight = self.weight_long
+
+        # insert into mongodb, if tag existed, update, otherwise create this tag
+        for tag in news_tags:
+            mongo.db.profiles.update({'user_id': g.uid}, {'$inc': {'likes.'+tag: weight}})
+
+        return util.post_success()

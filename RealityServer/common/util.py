@@ -11,8 +11,8 @@ def data_fail(message):
     return {'resultCode': 0, 'resultMessage': message}
 
 
-def message_success(message=None):
-    return {'resultCode': 1, 'message': message}
+def post_success():
+    return {'resultCode': 1}
 
 
 import bson

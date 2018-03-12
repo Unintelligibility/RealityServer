@@ -10,7 +10,7 @@ def info(msg):
     current_app.logger.info(msg)
 
 
-class ContentEngine(object):
+class SimilarContentEngine(object):
 
     SIMKEY = 'p:smlr:%s'
 
@@ -67,4 +67,8 @@ class ContentEngine(object):
         return self._r.zrange(self.SIMKEY % item_id, 0, num-1, withscores=True, desc=True)
 
 
-content_engine = ContentEngine()
+class RecommendEngine:
+    def predict(self):
+
+
+content_engine = SimilarContentEngine()
