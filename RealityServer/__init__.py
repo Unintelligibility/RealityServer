@@ -14,14 +14,14 @@ app.config.from_pyfile('config.py')
 mongo = PyMongo(app)
 auth = HTTPBasicAuth()
 
-from RealityServer.resourses.news import News, Recommend, Report
+from RealityServer.resourses.news import News, Relate, Report
 from RealityServer.resourses.media import Media
 from RealityServer.resourses.user import Register, SignIn, Interest, Token, Profile
 
 api = Api(app)
 api.add_resource(News, '/<string:user_id>/read')
-api.add_resource(Report, '/<string:new_id>/report')
-api.add_resource(Recommend, '/<string:new_id>/recommend')
+api.add_resource(Relate, '/<string:new_id>/relate')
+api.add_resource(Report, '/report')
 api.add_resource(Media, '/staroffice')
 api.add_resource(Register, '/signup')
 api.add_resource(SignIn, '/signin')

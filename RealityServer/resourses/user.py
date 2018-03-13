@@ -38,7 +38,10 @@ class SignIn(Resource):
         password = request.get_json(force=True)['password']
         if verify_password(username, password):
             token = generate_auth_token()
-            return {'resultCode': 1, 'data': {'_id': g.uid, 'token': token.decode('ascii')}}
+            selected = False
+            if mongo.db.profiles.find_one({'user_id': g.uid}):
+                selected = True
+            return {'resultCode': 1, 'data': {'_id': g.uid, 'token': token.decode('ascii'), 'selected': selected}}
         else:
             return {'resultCode': 0}, 400
 
@@ -130,8 +133,11 @@ class Profile(Resource):
         elif reading_time > self.time_long:
             weight = self.weight_long
 
-        # insert into mongodb, if tag existed, update, otherwise create this tag
-        for tag in news_tags:
-            mongo.db.profiles.update({'user_id': g.uid}, {'$inc': {'likes.'+tag: weight}})
+        # insert into mongodb
+        if mongo.db.profiles.find_one({'user_id': g.uid}):
+            for tag in news_tags:
+                mongo.db.profiles.update({'user_id': g.uid}, {'$inc': {'likes.' + tag: weight}})
 
+        else:
+            mongo.db.profiles.insert_one({'user_id': g.uid, 'likes': {tag: weight for tag in news_tags}})
         return util.post_success()

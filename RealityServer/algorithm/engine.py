@@ -11,7 +11,6 @@ def info(msg):
 
 
 class SimilarContentEngine(object):
-
     SIMKEY = 'p:smlr:%s'
 
     def __init__(self):
@@ -64,11 +63,12 @@ class SimilarContentEngine(object):
         :return: A list of lists like: [["19", 0.2203], ["494", 0.1693], ...]. The first item in each sub-list is
         the item ID and the second is the similarity score. Sorted by similarity score, descending.
         """
-        return self._r.zrange(self.SIMKEY % item_id, 0, num-1, withscores=True, desc=True)
+        return self._r.zrange(self.SIMKEY % item_id, 0, num - 1, withscores=True, desc=True)
 
 
 class RecommendEngine:
     def predict(self):
+        pass
 
 
 content_engine = SimilarContentEngine()
