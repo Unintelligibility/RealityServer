@@ -4,6 +4,7 @@ import redis
 from flask import current_app
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
+from rnn_utils import *
 
 
 def info(msg):
