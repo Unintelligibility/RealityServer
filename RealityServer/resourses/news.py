@@ -12,7 +12,7 @@ class News(Resource):
 
     def get(self, user_id):
         limit_news = 15
-        analyse_num = 30
+        analyse_num = 300
         global start
 
         news_num = self.news.count()
