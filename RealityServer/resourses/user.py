@@ -107,9 +107,9 @@ class Interest(Resource):
 
 class Profile(Resource):
     # 阅读超过6s +1 ,超过15s +2
-    time_medium = 6
+    time_medium = 0
     weight_medium = 1
-    time_long = 15
+    time_long = 2
     weight_long = 2
 
     @auth.login_required
