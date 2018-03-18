@@ -4,6 +4,7 @@ from bson.json_util import loads, dumps
 from RealityServer.common import util
 import json
 from RealityServer import mongo
+from bson import ObjectId
 
 
 class News(Resource):
@@ -20,7 +21,7 @@ class News(Resource):
         if start >= news_num:
             start = 0
         news = self.news.find()[start:start + analyse_num]
-        start = start + analyse_num  # TODO: using redis to mantain the user pool
+        start = start + analyse_num
 
         profile = mongo.db.profiles.find_one({'user_id': user_id})
         if profile:
@@ -28,8 +29,8 @@ class News(Resource):
 
             recommend_score = []
             # 初始版本-非向量化,低效率实现
-            # TODO: 向量化实现，加入正则化与IDF (建立tag链表
-            # TODO: use Spark to improve speed
+            #  向量化实现，加入正则化与IDF (建立tag字典
+            #  use Spark to improve speed
             for new in news:
                 source = new['source']
                 news_type = new['news_type']
@@ -49,7 +50,6 @@ class News(Resource):
 
         res = {i: x for i, x in
                enumerate(res)}
-        res = json.loads(dumps(res))
         util.oid_transform(res)
         return util.data_success(res)
 
@@ -61,10 +61,20 @@ class Relate(Resource):
         self.news = mongo.db.news
 
     def get(self, new_id):
-        res = [x for x in self.news.find().limit(3)]  # TODO: add recommend relative
-        res = json.loads(dumps(res))
-        util.oid_transform(res)
-        return res
+        the_news = self.news.find_one({'_id': ObjectId(new_id)})
+        tmp = list(self.news.find({'news_type': the_news['news_type']}).sort([('time', -1)]).limit(300))
+
+        the_tags = the_news['news_tags']
+        recommend_score = []
+
+        for item in tmp:
+            news_tags = item['news_tags'].split(';')
+            recommend_score.append(sum([1 for tag in news_tags if tag in the_tags]))
+        res_sort = [(new, score) for new, score in zip(tmp, recommend_score)]
+        res_sort.sort(key=lambda a: a[1], reverse=True)
+        res = [new for new, _ in res_sort[:3]]
+        util.oid_transform_list(res)
+        return util.data_success(res)
 
 
 class Report(Resource):

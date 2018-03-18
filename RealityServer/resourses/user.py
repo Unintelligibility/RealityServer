@@ -102,7 +102,6 @@ class Interest(Resource):
     def post(self):
         likes = request.get_json(force=True)['likes']
         if not mongo.db.profiles.find_one({'user_id': g.uid}):
-
             mongo.db.profiles.insert_one({'user_id': g.uid, 'likes': {x: self.interest_weight for x in likes}})
         return util.post_success(), 200
 

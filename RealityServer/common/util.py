@@ -1,6 +1,11 @@
 def oid_transform(my_dict):
     for x, y in my_dict.items():
-        y['_id'] = y['_id']['$oid']
+        y['_id'] = str(y['_id'])
+
+
+def oid_transform_list(my_list):
+    for x in my_list:
+        x['_id'] = str(x['_id'])
 
 
 def data_success(data):
