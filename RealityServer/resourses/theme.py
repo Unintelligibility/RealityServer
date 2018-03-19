@@ -20,9 +20,7 @@ class Theme_News(Resource):
     def __init__(self):
         self.theme_news = mongo.db.theme_news
 
-    def get(self):
-        get = request.get_json(force=True)
-        theme_name = get['theme_name']
+    def get(self, theme_name):
         res = {i: x for i, x in enumerate(self.theme_news.find({"theme": theme_name}))}
         res = json.loads(dumps(res))
         util.oid_transform(res)
