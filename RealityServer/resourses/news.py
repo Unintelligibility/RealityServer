@@ -70,7 +70,7 @@ class Relate(Resource):
         for item in tmp:
             news_tags = item['news_tags'].split(';')
             recommend_score.append(sum([1 for tag in news_tags if tag in the_tags]))
-        res_sort = [(new, score) for new, score in zip(tmp, recommend_score)]
+        res_sort = [(new, score) for new, score in zip(tmp, recommend_score) if not new['title'] == the_news['title']]
         res_sort.sort(key=lambda a: a[1], reverse=True)
         res = [new for new, _ in res_sort[:3]]
         util.oid_transform_list(res)
