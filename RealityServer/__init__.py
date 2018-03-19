@@ -17,6 +17,7 @@ auth = HTTPBasicAuth()
 from RealityServer.resourses.news import News, Relate, Report
 from RealityServer.resourses.media import Media
 from RealityServer.resourses.user import Register, SignIn, Interest, Token, Profile
+from RealityServer.resourses.theme import Theme, Theme_News
 
 api = Api(app)
 api.add_resource(News, '/<string:user_id>/read')
@@ -28,6 +29,8 @@ api.add_resource(SignIn, '/signin')
 api.add_resource(Token, '/token')
 api.add_resource(Interest, '/interest')
 api.add_resource(Profile, '/read_info')
+api.add_resource(Theme, '/theme_list')
+api.add_resource(Theme_News, '<string : theme_name>/theme_news')
 
 if __name__ == '__main__':
     app.run()
