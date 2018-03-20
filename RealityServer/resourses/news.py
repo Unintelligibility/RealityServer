@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask import request
 from flask_restful import Resource
 from bson.json_util import loads, dumps

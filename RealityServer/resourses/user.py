@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask_restful import Resource
 from RealityServer import mongo, app, auth
 from passlib.apps import custom_app_context as pwd_context

@@ -15,7 +15,7 @@ mongo = PyMongo(app)
 auth = HTTPBasicAuth()
 
 from RealityServer.resourses.news import News, Relate, Report
-from RealityServer.resourses.media import Media
+from RealityServer.resourses.media import Media,Source
 from RealityServer.resourses.user import Register, SignIn, Interest, Token, Profile
 from RealityServer.resourses.theme import Theme, Theme_News
 
@@ -31,6 +31,7 @@ api.add_resource(Interest, '/interest')
 api.add_resource(Profile, '/read_info')
 api.add_resource(Theme, '/theme_list')
 api.add_resource(Theme_News, '/<string:theme_name>/theme_news')
+api.add_resource(Source,'/source')
 
 if __name__ == '__main__':
     app.run()
