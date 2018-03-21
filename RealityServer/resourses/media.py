@@ -28,4 +28,4 @@ class Source(Resource):
         res = json.loads(dumps(res))
         print(res)
         util.oid_transform_list(res)
-        return res
+        return util.data_success(res)
