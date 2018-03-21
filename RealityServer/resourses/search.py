@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask import request
 from flask_restful import Resource
 from RealityServer.common import util
@@ -10,12 +11,12 @@ class Search(Resource):
 		self.news = mongo.db.news
 
 	def get(self,keyword,start,size):
+		print(keyword)
 		if keyword is None or start is None or size is None :
 			return {'resultCode': 0},400
-		regx = re.compile("/"+keyword.encode()+"/", re.IGNORECASE)
-		# print(keyword.encode("utf-8"))
-		res={i: util.bytesToStr(news) for i,news in enumerate(self.news.find({"title":regx}).sort("time",-1).skip(start*10).limit(size))}
-		util.oid_transform(res)
+		regx = re.compile(keyword, re.IGNORECASE)
+		res=[news for news in self.news.find({"title":regx}).sort("time",-1).skip(start*10).limit(size)]
+		util.oid_transform_list(res)
 		return util.data_success(res)
 
 	def post(self):
