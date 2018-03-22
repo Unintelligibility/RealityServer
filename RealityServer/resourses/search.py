@@ -15,8 +15,8 @@ class Search(Resource):
 		if keyword is None or start is None or size is None :
 			return {'resultCode': 0},400
 		regx = re.compile(keyword, re.IGNORECASE)
-		res=[news for news in self.news.find({"title":regx}).sort("time",-1).skip(start*10).limit(size)]
-		util.oid_transform_list(res)
+		res={i:news for i, news in enumerate(self.news.find({"title":regx}).sort("time",-1).skip(start*10).limit(size))}
+		util.oid_transform_search_dic(res)
 		return util.data_success(res)
 
 	def post(self):

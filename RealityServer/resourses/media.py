@@ -26,6 +26,5 @@ class Source(Resource):
     def get(self):
         res=self.source.find({}).sort("remark",-1).limit(size)
         res = json.loads(dumps(res))
-        print(res)
         util.oid_transform_list(res)
         return util.data_success(res)
