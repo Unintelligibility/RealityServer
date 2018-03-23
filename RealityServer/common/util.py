@@ -1,4 +1,7 @@
 import codecs
+import os
+
+print(os.path.dirname(__file__))
 
 
 def oid_transform(my_dict):
