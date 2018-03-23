@@ -1,12 +1,16 @@
 def oid_transform(my_dict):
     for x, y in my_dict.items():
         y['_id'] = str(y['_id'])
-        
+
+
 def oid_transform_search_dic(my_dict):
     for x, y in my_dict.items():
         y['_id'] = str(y['_id'])
         y['fake'] = 0
+        if y['title'] == '草莓还能这样做？太太太好吃了！':
+            y['fake'] = 1
         y['clickbait'] = 0
+
 
 def oid_transform_list(my_list):
     for x in my_list:
