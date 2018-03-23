@@ -16,6 +16,7 @@ def oid_transform_search_dic(my_dict):
         y['clickbait'] = 0
         for clickbait in clickbaits:
             if clickbait in y['title']:
+                print(y['title'])
                 y['clickbait'] = 1
 
 
