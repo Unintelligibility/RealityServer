@@ -48,7 +48,7 @@ def bytes_to_str(obj):
 
 
 clickbaits = []
-with codecs.open('RealityServer/corpus/clickbait.txt') as f:
+with codecs.open('RealityServer/corpus/clickbait.txt', 'r', 'utf-8') as f:
     for line in f:
         line = line.strip()
         clickbaits.append(line)
