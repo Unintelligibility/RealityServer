@@ -1,8 +1,6 @@
 import codecs
 import os
 
-print(os.getcwd())
-
 
 def oid_transform(my_dict):
     for x, y in my_dict.items():
@@ -47,8 +45,10 @@ def bytes_to_str(obj):
     return obj
 
 
+path = os.getcwd()
 clickbaits = []
 with codecs.open('RealityServer/corpus/clickbait.txt', 'r', 'utf-8') as f:
+    print('read file successfully')
     for line in f:
         line = line.strip()
         clickbaits.append(line)
