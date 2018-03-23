@@ -1,3 +1,6 @@
+import codecs
+
+
 def oid_transform(my_dict):
     for x, y in my_dict.items():
         y['_id'] = str(y['_id'])
@@ -7,7 +10,8 @@ def oid_transform_search_dic(my_dict):
     for x, y in my_dict.items():
         y['_id'] = str(y['_id'])
         y['fake'] = 0
-        if y['_id'] == '5aa51403413ec78f9933b427':
+        if y['title'] in clickbaits:
+            print(y['title'])
             y['clickbait'] = 1
 
 
@@ -38,3 +42,10 @@ def bytes_to_str(obj):
         if type(obj[key]) is bson.binary.Binary:
             obj[key] = bson.BSON(obj[key])
     return obj
+
+
+clickbaits = []
+with codecs.open('RealityServer/corpus/clickbait.txt') as f:
+    for line in f:
+        line = line.strip()
+        clickbaits.append(line)

@@ -33,7 +33,7 @@ class SimilarContentEngine(object):
         """
         Train the engine.
         Create a TF-IDF matrix of unigrams, bigrams, and trigrams for each product. The 'stop_words' param
-        tells the TF-IDF module to ignore common english words like 'the', etc.
+        tells the TF-IDF module to ignore common english wiki_words like 'the', etc.
         Then we compute similarity between all products using SciKit Leanr's linear_kernel (which in this case is
         equivalent to cosine similarity).
         Iterate through each item's similar items and store the 100 most-similar. Stops at 100 because well...

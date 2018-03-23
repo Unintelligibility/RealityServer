@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 import collections
 import nltk
 import numpy as np
-
 # EDA
 maxlen = 40
 word_freqs = collections.Counter()
