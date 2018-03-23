@@ -47,7 +47,7 @@ def bytes_to_str(obj):
 
 path = os.getcwd()
 clickbaits = []
-with codecs.open('RealityServer/corpus/clickbait.txt', 'r', 'utf-8') as f:
+with codecs.open(path+'/'+'RealityServer/corpus/clickbait.txt', 'r', 'utf-8') as f:
     print('read file successfully')
     for line in f:
         line = line.strip()
