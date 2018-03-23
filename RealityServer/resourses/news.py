@@ -21,7 +21,7 @@ class News(Resource):
         print(news_num)
         if start >= news_num:
             start = 0
-        news = self.news.find()[start:start + analyse_num]
+        news = self.news.find().sort([('time', -1)])[start:start + analyse_num]
         start = start + analyse_num
 
         profile = mongo.db.profiles.find_one({'user_id': user_id})
