@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask import request
 from flask_restful import Resource
 from bson.json_util import loads, dumps
@@ -50,7 +51,7 @@ class News(Resource):
 
         res = {i: x for i, x in
                enumerate(res)}
-        util.oid_transform(res)
+        util.oid_transform_search_dic(res)
         return util.data_success(res)
 
 
