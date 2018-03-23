@@ -51,7 +51,7 @@ class News(Resource):
 
         res = {i: x for i, x in
                enumerate(res)}
-        util.oid_transform(res)
+        util.oid_transform_search_dic(res)
         return util.data_success(res)
 
 
