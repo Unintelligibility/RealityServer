@@ -9,7 +9,6 @@ def oid_transform_search_dic(my_dict):
         y['fake'] = 0
         if y['_id'] == '5aa51403413ec78f9933b427':
             y['clickbait'] = 1
-        y['clickbait'] = 0
 
 
 def oid_transform_list(my_list):
