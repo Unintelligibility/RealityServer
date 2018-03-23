@@ -11,9 +11,10 @@ def oid_transform_search_dic(my_dict):
     for x, y in my_dict.items():
         y['_id'] = str(y['_id'])
         y['fake'] = 0
-        if y['title'] in clickbaits:
-            print(y['title'])
-            y['clickbait'] = 1
+        y['clickbait'] = 0
+        for clickbait in clickbaits:
+            if clickbait in y['title']:
+                y['clickbait'] = 1
 
 
 def oid_transform_list(my_list):
