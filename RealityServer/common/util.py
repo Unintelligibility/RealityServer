@@ -7,7 +7,7 @@ def oid_transform_search_dic(my_dict):
     for x, y in my_dict.items():
         y['_id'] = str(y['_id'])
         y['fake'] = 0
-        if y['title'].startswith('詹皇反对'):
+        if y['title'].strip().startswith('詹皇反对'):
             y['clickbait'] = 1
         y['clickbait'] = 0
 
