@@ -44,7 +44,7 @@ class SignIn(Resource):
                 selected = True
             return {'resultCode': 1, 'data': {'_id': g.uid, 'token': token.decode('ascii'), 'selected': selected}}
         else:
-            return {'resultCode': 0}, 400
+            return util.data_fail('用户名密码错误'), 400
 
 
 class Token(Resource):
