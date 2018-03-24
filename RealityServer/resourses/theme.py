@@ -24,7 +24,7 @@ class Theme_News(Resource):
         self.rumor = mongo.db.rumor
 
     def get(self, theme_name):
-        if(theme_name=="辟谣专栏".decode('UTF-8')):
+        if(theme_name=="辟谣专栏"):
             res={i:x for i, x in enumerate(self.rumor.find({}))}
             res = json.loads(dumps(res))
             util.oid_transform(res)
