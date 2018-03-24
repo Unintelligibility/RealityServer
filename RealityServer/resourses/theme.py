@@ -12,7 +12,7 @@ class Theme(Resource):
         # self.rumor = mongo.db.rumor
 
     def get(self):
-        res = {i: x for i, x in enumerate(self.theme_list.find())}
+        res = {i: x for i, x in enumerate(self.theme_list.find().sort("time",-1))}
         res = json.loads(dumps(res))
         util.oid_transform(res)
         return {'resultCode': 1, 'data': res}
