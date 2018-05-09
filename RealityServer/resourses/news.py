@@ -13,7 +13,7 @@ class News(Resource):
         self.news = mongo.db.news
 
     def get(self, user_id):
-        limit_news = 15
+        limit_news = 1
         analyse_num = 50
         global start
 
